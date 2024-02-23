@@ -35,6 +35,7 @@ if command -v emacs &>/dev/null; then
 fi
 
 alias e='$EDITOR'
+alias ec="emacsclient -nw"
 alias g="grep -isE"
 alias l="ls -lA --color=always"
 alias r='source $HOME/.bashrc'

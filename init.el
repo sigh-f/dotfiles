@@ -244,6 +244,10 @@
 (add-hook 'emacs-startup-hook (lambda() (menu-bar-mode -1)))
 (set-display-table-slot standard-display-table 'vertical-border (make-glyph-code ?│))
 
+(use-package pulsar
+  :hook
+  ((emacs-startup . pulsar-global-mode)))
+
 (use-package centaur-tabs
   :hook
   ((emacs-startup . centaur-tabs-mode)
@@ -309,6 +313,8 @@
   (setq avy-keys '(?a ?s ?d ?f ?j ?k ?l))
   :bind
   (:map user-map
+        ("c l" . avy-copy-line)
+        ("c r" . avy-copy-region)
         ("C-f" . avy-goto-word-1)
         ("C-l" . avy-goto-line)
         ("k l" . avy-kill-whole-line)
@@ -457,4 +463,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(diff-hl-insert ((t (:background "#4c9e8a" :foreground "#4c9e8a")))))
+ '(bold ((t (:foreground "#f7768e" :weight bold))))
+ '(diff-hl-insert ((t (:background "#4c9e8a" :foreground "#4c9e8a"))))
+ '(italic ((t (:foreground "#bb9af7" :slant italic))))
+ '(org-code ((t (:inherit shadow :foreground "#e0af68")))))
