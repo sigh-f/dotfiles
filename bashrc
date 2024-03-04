@@ -46,10 +46,11 @@ if command -v fzf &>/dev/null; then
     # TODO pass in initial search
     # $1: Directory to s
     fe() {
-        dir=${1:-*}
-        # shellcheck disable=2086
-        # The default '*' is set to perform glob expansion.
-        files=$(find $dir -path '*/.*' -prune -o -print | fzf --multi --select-1 --exit-0) || return $?
+        if [ -n "$1" ]; then
+            files=$(find . -name "*$1*" -print | fzf --multi --select-1 --exit-0) || return $?
+        else
+            files=$(find . -path '*/.*' -prune -o -print | fzf --multi --select-1 --exit-0) || return $?
+        fi
         # shellcheck disable=2086
         # Word splitting is required here to pass multiple arguments.
         $EDITOR $files
@@ -256,6 +257,8 @@ _prompt() {
     PS1+="$(print_style $BLUE)\w$(print_style $GREEN) $ $(reset_style)"
 }
 PROMPT_COMMAND=_prompt
+
+[ -n "$EAT_SHELL_INTEGRATION_DIR" ] && source "$EAT_SHELL_INTEGRATION_DIR/bash"
 
 # ------------------->
 # Local Configuration

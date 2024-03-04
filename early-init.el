@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(add-hook 'emacs-startup-hook (lambda() (menu-bar-mode -1)))
+
 (setq gc-cons-threshold most-positive-fixnum  ; minimize gcs to start emacs faster
       inhibit-splash-screen t                 ; open to the *scratch* buffer
       package-enable-at-startup nil)          ; disable the default package system, package.el
