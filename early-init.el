@@ -8,6 +8,9 @@
       inhibit-splash-screen t                 ; open to the *scratch* buffer
       package-enable-at-startup nil)          ; disable the default package system, package.el
 
+;; Optimization for lsp-mode. Required for emacs-lsp-booster.
+(setenv "LSP_USE_PLISTS" "true")
+
 ;;
 ;; Initialize package management. straight.el makes it easy to hack on
 ;; packages because it clones their git repos locally.

@@ -14,21 +14,46 @@
       next-error-highlight 5
       next-error-highlight-no-select 5)
 
+;; 'compile' and 'project-compile' reference the 'compile-command' variable
+;; for the default command(s). Consequently, neither commands correctly
+;; preserve compilation history. Below, 'user/compile-dwim' and 'user/recompile-dwim'
+;; are defined to add context support; specifically, 'compile-command' is made
+;; local to the current project, or the current buffer if no project is active.
+;; 'compile-command' is effectively split into a hash/alist.
+(defvar context-aware-compile-command-alist '() "Mapping of compilable-entity to last compile command.")
+
+(defun user/get-compilation-context ()
+  (if (project-current)
+      (project-root (project-current))
+    (buffer-name)))
+
+(defun user/get-context-aware-compile-command (context)
+  (or (cdr (assoc context context-aware-compile-command-alist)) ""))
+
 (defun user/compile-dwim ()
-  "Run `project-compile` or `compile`."
+  "Compile with project/buffer history context awareness."
   (interactive)
-  (let ((project (project-current)))
-    (if project
-        (project-compile)
-      (compile))))
-(global-set-key (kbd "C-x p c") #'user/compile-dwim)
-(define-key user-map/compilation (kbd "c") 'compile)
-(define-key user-map/compilation (kbd "g") 'recompile)
-(define-key user-map/compilation (kbd "k") 'kill-compilation)
-;; (Anywhere) jump to [next|previous] error from the last compilation, AND
-;; move point to the corresponding code.
-(define-key user-map/compilation (kbd "C-n") 'next-error)
-(define-key user-map/compilation (kbd "C-p") 'previous-error)
+  (let* ((context (if (project-current) (project-root (project-current)) (buffer-name)))
+         (compile-command (or (cdr (assoc context context-aware-compile-command-alist)) ""))
+         (new-context-p (eq compile-command "")))
+    (call-interactively #'compile)
+    (if new-context-p
+        (add-to-list 'context-aware-compile-command-alist (list context compile-command))
+      (setf (cdr (assoc context context-aware-compile-command-alist)) compile-command))))
+
+(defun user/recompile-dwim ()
+  "Recompile with project/buffer history context awareness."
+  (interactive)
+  (let* ((context-key (if (project-current) (project-root (project-current)) (buffer-name)))
+         (compile-command (or (cdr (assoc context-key context-aware-compile-command-alist)) ""))
+         (new-context-p (eq compile-command "")))
+    (if new-context-p
+        (message "No known compile command for the current context.")
+      (compile compile-command))))
+
+(define-key user-map/compilation (kbd "c") 'user/compile-dwim)
+(define-key user-map/compilation (kbd "g") 'user/recompile-dwim)
+(define-key user-map/compilation (kbd "k") 'kill-compilation) ;; TODO: add context
 
 ;; By default compile commands will use a single *compilation* buffer,
 ;; preventing multiple concurrent compilations. Provide a unique naming

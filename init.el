@@ -23,13 +23,8 @@
 (require 'init-lang-ruby)
 (require 'init-lang-sh)
 
-(require 'init-treemacs)
-
-
 (define-key user-map (kbd "C-d") 'zap-up-to-char)
-
-
-
+(setq split-width-threshold most-positive-fixnum)
 
 (use-package pulsar
   :hook

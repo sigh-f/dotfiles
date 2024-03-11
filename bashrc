@@ -23,6 +23,10 @@ init_homebrew() {
 }
 init_homebrew
 
+if [ -d "$HOME/.config/bin" ]; then
+    PATH="$PATH:$HOME/.config/bin"
+fi
+
 # ------------------------>
 # General Setup (builtins)
 
@@ -271,3 +275,4 @@ for local_config in "$HOME/.config/bash/"*; do
     [ "$local_config" = "$MUTABLE_CONFIG" ] && continue
     [ -f "$local_config" ] && . "$local_config"
 done
+. "$HOME/.cargo/env"
