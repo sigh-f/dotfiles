@@ -17,7 +17,6 @@
   :config
   (setq org-enforce-todo-checkbox-dependencies t
         org-enforce-todo-dependencies t
-        org-fold-catch-invisible-edits 'show-and-error
         org-hide-emphasis-markers t
         org-log-done 'time
         org-log-into-drawer "LOGBOOK"
@@ -25,6 +24,16 @@
         org-startup-folded t
         org-todo-keywords '((sequence "TODO(t)" "REVIEW(v@)" "RELEASE(r@)" "|" "DONE(d@)" "BLOCKED(b@)")
                             (sequence "BLOCKED(b@)" "|" "DEAD(k@)")))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((C . t)
+     (emacs-lisp . t)
+     (makefile . t)
+     (perl . t)
+     (plantuml . t)
+     (python . t)
+     (ruby . t)
+     (shell . t)))
   :bind
   (:map global-map
         ("C-x p o" . 'user/find-current-notes-other-window))

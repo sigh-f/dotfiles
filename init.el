@@ -26,10 +26,34 @@
 (define-key user-map (kbd "C-d") 'zap-up-to-char)
 (setq split-width-threshold most-positive-fixnum)
 
+(setq-default fill-column 80)
+(add-hook 'prog-mode-hook 'display-fill-column-indicator-mode)
+
 (use-package pulsar
   :hook
   (emacs-startup . pulsar-global-mode))
 
+;;; init-treemacs.el --- treemacs.
+;;; Commentary:
+;;; Code:
+
+(use-package solaire-mode)
+
+(use-package treemacs
+  :config
+  (treemacs-project-follow-mode)
+  (setq treemacs-width 30
+        treemacs--project-follow-delay 0.1)
+  :bind
+  (:map treemacs-mode-map
+        ("M-m" . nil)
+        ("M-o" . nil))
+  (:map user-map
+        ("C-j" . treemacs-select-window)))
+
+(use-package treemacs-nerd-icons
+  :config
+  (treemacs-load-theme "nerd-icons"))
 
 ;; Highlight non-user-input changes (e.g. undo)
 (use-package volatile-highlights
@@ -70,6 +94,8 @@
   (setq company-idle-delay 0.25
         company-minimum-prefix-length 2
         company-tooltip-align-annotations t))
+
+(use-package crux)
 
 ;; Consult - various builtin function enhancements
 (use-package consult
@@ -156,7 +182,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("f5f80dd6588e59cfc3ce2f11568ff8296717a938edd448a947f9823a4e282b66" "3fe1ebb870cc8a28e69763dde7b08c0f6b7e71cc310ffc3394622e5df6e4f0da" "8d3ef5ff6273f2a552152c7febc40eabca26bae05bd12bc85062e2dc224cde9a" "88f7ee5594021c60a4a6a1c275614103de8c1435d6d08cc58882f920e0cec65e" "691d671429fa6c6d73098fc6ff05d4a14a323ea0a18787daeb93fde0e48ab18b" "4594d6b9753691142f02e67b8eb0fda7d12f6cc9f1299a49b819312d6addad1d" "34cf3305b35e3a8132a0b1bdf2c67623bc2cb05b125f8d7d26bd51fd16d547ec" "e3daa8f18440301f3e54f2093fe15f4fe951986a8628e98dcd781efbec7a46f2" "e4a702e262c3e3501dfe25091621fe12cd63c7845221687e36a79e17cf3a67e0" "5f128efd37c6a87cd4ad8e8b7f2afaba425425524a68133ac0efd87291d05874" "8c7e832be864674c220f9a9361c851917a93f921fedb7717b1b5ece47690c098" "ffafb0e9f63935183713b204c11d22225008559fa62133a69848835f4f4a758c" "7ec8fd456c0c117c99e3a3b16aaf09ed3fb91879f6601b1ea0eeaee9c6def5d9" "4ade6b630ba8cbab10703b27fd05bb43aaf8a3e5ba8c2dc1ea4a2de5f8d45882" "dd4582661a1c6b865a33b89312c97a13a3885dc95992e2e5fc57456b4c545176" "571661a9d205cb32dfed5566019ad54f5bb3415d2d88f7ea1d00c7c794e70a36" "10e5d4cc0f67ed5cafac0f4252093d2119ee8b8cb449e7053273453c1a1eb7cc" "e312bb200ab9012ae2061fe586ac844c57df5e5fc4e62c28c63f3a502666f304" default))
+   '("93011fe35859772a6766df8a4be817add8bfe105246173206478a0706f88b33d" "6e33d3dd48bc8ed38fd501e84067d3c74dfabbfc6d345a92e24f39473096da3f" "2b501400e19b1dd09d8b3708cefcb5227fda580754051a24e8abf3aff0601f87" "aec7b55f2a13307a55517fdf08438863d694550565dee23181d2ebd973ebd6b8" "56044c5a9cc45b6ec45c0eb28df100d3f0a576f18eef33ff8ff5d32bac2d9700" "7c28419e963b04bf7ad14f3d8f6655c078de75e4944843ef9522dbecfcd8717d" "f5f80dd6588e59cfc3ce2f11568ff8296717a938edd448a947f9823a4e282b66" "3fe1ebb870cc8a28e69763dde7b08c0f6b7e71cc310ffc3394622e5df6e4f0da" "8d3ef5ff6273f2a552152c7febc40eabca26bae05bd12bc85062e2dc224cde9a" "88f7ee5594021c60a4a6a1c275614103de8c1435d6d08cc58882f920e0cec65e" "691d671429fa6c6d73098fc6ff05d4a14a323ea0a18787daeb93fde0e48ab18b" "4594d6b9753691142f02e67b8eb0fda7d12f6cc9f1299a49b819312d6addad1d" "34cf3305b35e3a8132a0b1bdf2c67623bc2cb05b125f8d7d26bd51fd16d547ec" "e3daa8f18440301f3e54f2093fe15f4fe951986a8628e98dcd781efbec7a46f2" "e4a702e262c3e3501dfe25091621fe12cd63c7845221687e36a79e17cf3a67e0" "5f128efd37c6a87cd4ad8e8b7f2afaba425425524a68133ac0efd87291d05874" "8c7e832be864674c220f9a9361c851917a93f921fedb7717b1b5ece47690c098" "ffafb0e9f63935183713b204c11d22225008559fa62133a69848835f4f4a758c" "7ec8fd456c0c117c99e3a3b16aaf09ed3fb91879f6601b1ea0eeaee9c6def5d9" "4ade6b630ba8cbab10703b27fd05bb43aaf8a3e5ba8c2dc1ea4a2de5f8d45882" "dd4582661a1c6b865a33b89312c97a13a3885dc95992e2e5fc57456b4c545176" "571661a9d205cb32dfed5566019ad54f5bb3415d2d88f7ea1d00c7c794e70a36" "10e5d4cc0f67ed5cafac0f4252093d2119ee8b8cb449e7053273453c1a1eb7cc" "e312bb200ab9012ae2061fe586ac844c57df5e5fc4e62c28c63f3a502666f304" default))
  '(highlight-indent-guides-method 'character)
  '(magit-todos-insert-after '(bottom) nil nil "Changed by setter of obsolete option `magit-todos-insert-at'"))
 (custom-set-faces
@@ -166,4 +192,6 @@
  ;; If there is more than one, they won't work right.
  '(diff-hl-insert ((t (:background "#4c9e8a" :foreground "#4c9e8a"))))
  '(italic ((t (:foreground "#bb9af7" :slant italic))))
- '(org-code ((t (:inherit shadow :foreground "#e0af68")))))
+ '(nerd-icons-purple ((t (:foreground "#8FBCBB"))))
+ '(org-code ((t (:inherit shadow :foreground "#e0af68"))))
+ '(solaire-default-face ((t (:background "#1f2233")))))
